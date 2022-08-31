@@ -12,6 +12,7 @@ APPLICATIONS="${DATA_SRC}/applications.json"
 # Execute the scripts
 execute(){
     action=$1
+    app=$2
 
     success_block "EasyDebianSetup - by Stiene"
     echo ""
@@ -63,6 +64,9 @@ execute(){
         return
     fi
 
-    eds_list
-    executeOne $action
+    if [ -z $app ]; then
+        eds_list
+    fi
+
+    executeOne $action $app
 }

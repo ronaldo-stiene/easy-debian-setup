@@ -18,16 +18,19 @@ executeAll(){
 
 executeOne(){
     action=$1
+    app=$2
 
-    echo -en "${cyan}Select the app: ${reset}"
-    read app
-    while [[ ! "$app" =~ [:alnum:] || -z "$app" ]]
-    do
-        error "The app must have only alphanumeric characters."; echo ""
+    if [ -z $app ]; then
         echo -en "${cyan}Select the app: ${reset}"
         read app
-    done
-    echo ""
+        while [[ ! "$app" =~ [:alnum:] || -z "$app" ]]
+        do
+            error "The app must have only alphanumeric characters."; echo ""
+            echo -en "${cyan}Select the app: ${reset}"
+            read app
+        done
+        echo ""
+    fi
 
     id=$(jq -c ".$app.id" $APPLICATIONS | tr -d '"')
 

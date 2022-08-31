@@ -15,6 +15,10 @@ if [[ $1 != -* ]]; then
     ACTION=$1
 fi
 
+if [[ $2 != -* ]]; then
+    APP=$2
+fi
+
 for i in $*; do 
     case $i in
         -a) AVAIABLE="true" ;;
@@ -26,4 +30,4 @@ done
 
 . "${SRC}/src/main.sh"
 
-execute $ACTION
+execute $ACTION $APP
