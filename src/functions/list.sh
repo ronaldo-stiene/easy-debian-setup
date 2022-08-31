@@ -10,14 +10,14 @@ eds_list(){
         category=$(echo $i | jq .category | tr -d '"')
         command=$(echo $i | jq .command | tr -d '"') 
 
-        if [ -z $previousCategory ] || [ $previousCategory != $category ]; then 
+        if [ -z $previousCategory ] || [ $previousCategory != ${category^} ]; then 
             if ! [ -z $previousCategory ]; then echo ""; fi
             success ${category^}
         fi
 
         echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
 
-        previousCategory=$category
+        previousCategory=${category^}
     done
 
     echo ""
@@ -35,14 +35,14 @@ eds_avaiable(){
             continue
         fi
 
-        if [ -z $previousCategory ] || [ $previousCategory != $category ]; then 
+        if [ -z $previousCategory ] || [ $previousCategory != ${category^} ]; then 
             if ! [ -z $previousCategory ]; then echo ""; fi
             success ${category^}
         fi
 
         echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
 
-        previousCategory=$category
+        previousCategory=${category^}
     done
 
     echo ""
