@@ -8,6 +8,7 @@ eds_list(){
     jq -c ".[]" $APPLICATIONS | while read i; do
         id=$(echo $i | jq .id | tr -d '"')
         category=$(echo $i | jq .category | tr -d '"')
+        subCategory=$(echo $i | jq .subcategory | tr -d '"')
         command=$(echo $i | jq .command | tr -d '"') 
 
         if [ -z $previousCategory ] || [ $previousCategory != ${category^} ]; then 
@@ -15,7 +16,17 @@ eds_list(){
             success ${category^}
         fi
 
-        echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
+        if [ $subCategory == 'null' ]; then 
+            echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
+        else
+            if [ -z $previousSubCategory ] || [ $previousSubCategory != ${subCategory^} ]; then 
+                echo -e "  ${green}${subCategory^}${reset}"
+            fi
+            
+            echo -en "  - ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
+            
+            previousSubCategory=${subCategory^}
+        fi
 
         previousCategory=${category^}
     done
@@ -28,6 +39,7 @@ eds_avaiable(){
         action=$1
         id=$(echo $i | jq .id | tr -d '"')
         category=$(echo $i | jq .category | tr -d '"')
+        subCategory=$(echo $i | jq .subcategory | tr -d '"')
         command=$(echo $i | jq .command | tr -d '"') 
         folder=$(echo $i | jq .folder | tr -d '"')
 
@@ -40,7 +52,17 @@ eds_avaiable(){
             success ${category^}
         fi
 
-        echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
+        if [ $subCategory == 'null' ]; then 
+            echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
+        else
+            if [ -z $previousSubCategory ] || [ $previousSubCategory != ${subCategory^} ]; then 
+                echo -e "  ${green}${subCategory^}${reset}"
+            fi
+            
+            echo -en "  - ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
+            
+            previousSubCategory=${subCategory^}
+        fi
 
         previousCategory=${category^}
     done
