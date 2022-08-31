@@ -12,7 +12,7 @@ eds_list(){
 
         if [ -z $previousCategory ] || [ $previousCategory != $category ]; then 
             if ! [ -z $previousCategory ]; then echo ""; fi
-            success $category
+            success ${category^}
         fi
 
         echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
@@ -37,7 +37,7 @@ eds_avaiable(){
 
         if [ -z $previousCategory ] || [ $previousCategory != $category ]; then 
             if ! [ -z $previousCategory ]; then echo ""; fi
-            success $category
+            success ${category^}
         fi
 
         echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
