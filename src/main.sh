@@ -1,52 +1,68 @@
 #!/bin/bash
 
 # Check if the scrit was called directly
-if [ -z $src ]; then echo "This script should not be called directly"; exit 0; fi
+if [ -z $SRC ]; then echo "This script should not be called directly"; exit 0; fi
+
+# Import the scripts
+. "${SRC}/src/import.sh"
 
 # Set the applications var
-applications="${src}/data/applications.json"
-
-# Import the console message helpers
-. "${src}/src/output/messages.sh"
-. "${src}/src/output/blocks.sh"
-
-# Import the functions
-. "${src}/src/functions/action.sh"
-
-# Check the flags
-while getopts :al FLAG; do
-    case $FLAG in
-        a) all="true" ;;
-        l) list="true" ;;
-    esac
-done
+APPLICATIONS="${DATA_SRC}/applications.json"
 
 # Execute the scripts
 execute(){
     action=$1
 
-    # Title
-    success_block "Easy ${action^^} - by Stiene"
+    success_block "EasyDebianSetup - by Stiene"
     echo ""
 
-    # Execute the action for all aplications
-    if ! [ -z $all ]; then
+    if ! [ -z $HELP ]; then
+        eds_help
+        return
+    fi
+
+    if [ -z $DATA_SRC ]; then
+        error "Error: The data source was not defined"
+        echo "eds: See the installation manual in: https://github.com/ronaldo-stiene/easy-debian-setup"
+        return
+    fi
+
+    if ! [ -a $APPLICATIONS ]; then
+        error "Error: The application JSON was not found in $DATA_SRC"
+        echo "eds: See the installation manual in: https://github.com/ronaldo-stiene/easy-debian-setup"
+        return
+    fi
+
+    if ! [ -z $LIST ]; then
+        eds_list
+        return
+    fi
+
+    if [ -z $action ]; then
+        error "Error: Missing <action> in 'eds <action> [-a | -x]'"
+        echo "eds: See 'eds -h' for the avaiable commands"
+        return
+    fi
+
+    if ! [ -z $AVAIABLE ]; then
+        eds_avaiable $action
+        return
+    fi
+
+    if ! [ -z $ALL ]; then
         echo -en "${cyan}Are you sure that you want ${action} all aplications? [y/n]: ${reset}"
         read allConfirm
         echo ""
         
-        if [ ${allConfirm^^} == 'Y' ]; then . "${src}/src/execute/all.sh"; else warning "Exiting"; fi
+        if [ ${allConfirm^^} == 'Y' ]; then 
+            executeAll $action
+        else 
+            warning "Exiting"
+        fi
 
         return
     fi
 
-    # List the applications
-    . "${src}/src/actions/list.sh"
-
-    if ! [ -z $list ]; then
-        return
-    fi
-
-    # Execute the action for one application
-    . "${src}/src/execute/one.sh"
+    eds_list
+    executeOne $action
 }

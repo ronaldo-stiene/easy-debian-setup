@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if the scrit was called directly
-if [ -z $src ]; then echo "This script should not be called directly"; exit 0; fi
+if [ -z $SRC ]; then echo "This script should not be called directly"; exit 0; fi
 
 cyan="\033[1;36m"
 green="\033[32m"

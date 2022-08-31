@@ -1,10 +1,6 @@
 #!/bin/bash
 
 # Set the source folder
-src=$(cd $(dirname "$0"); pwd)
+SRC=$(cd $(dirname "$0"); pwd)
 
-# Import the main
-. "${src}/src/main.sh"
-
-# Execute
-execute "install"
+sudo ln -sL "${SRC}/eds.sh" /usr/local/bin/eds
