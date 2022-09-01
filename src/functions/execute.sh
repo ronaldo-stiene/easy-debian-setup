@@ -72,6 +72,6 @@ action(){
         . $file
         success_block "${action^} of ${name} finished"
     else
-        warning_block "The ${action} script for ${name} doesn't exists. Skipping."
+        warning_block "The ${action} script for ${name} doesn't exists. Searchin in ${file}. Skipping."
     fi
 }
