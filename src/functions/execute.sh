@@ -55,12 +55,12 @@ action(){
     success "${action^} of ${name} starting..."
 
     if [ $action == 'install' ]; then
-        if [ -x "$(command -v ${command})" ]; then
+        if [ -x "$(command -v ${command})" ] || [ -e "${command}" ]; then
             success_block "${name} is already installed"
             return
         fi
     else
-        if ! [ -x "$(command -v ${command})" ]; then
+        if [ ! -x "$(command -v ${command})" ] && [ ! -e "${command}" ]; then
             error_block "${name} is not installed"
             return
         fi
