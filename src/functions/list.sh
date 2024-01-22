@@ -8,14 +8,19 @@ eds_list(){
     jq -c ".[]" $APPLICATIONS | while read i; do
         id=$(echo $i | jq .id | tr -d '"')
         category=$(echo $i | jq .category | tr -d '"')
-        command=$(echo $i | jq .command | tr -d '"') 
+        command=$(echo $i | jq .command | tr -d '"')
 
         if [ -z $previousCategory ] || [ $previousCategory != ${category^} ]; then 
             if ! [ -z $previousCategory ]; then echo ""; fi
             success ${category^}
         fi
 
-        echo -en "- ${id}: "; if [ -x "$(command -v ${command})" ]; then echo -e "${green}Installed${reset}"; else echo -e "${red}Not Installed${reset}"; fi
+        echo -en "- ${id}: ";
+        if [ -x "$(command -v ${command})" ] || [ -e "${command}" ]; then
+            echo -e "${green}Installed${reset}";
+        else
+            echo -e "${red}Not Installed${reset}";
+        fi
 
         previousCategory=${category^}
     done
