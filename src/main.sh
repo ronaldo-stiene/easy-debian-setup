@@ -35,7 +35,12 @@ execute(){
     fi
 
     if ! [ -z $LIST ]; then
-        eds_list
+        eds_list false
+        return
+    fi
+
+    if ! [ -z $LIST_ONLY_TERMINAL ]; then
+        eds_list true
         return
     fi
 

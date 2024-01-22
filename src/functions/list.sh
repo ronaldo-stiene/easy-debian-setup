@@ -4,11 +4,17 @@
 if [ -z $SRC ]; then echo "This script should not be called directly"; exit 0; fi
 
 eds_list(){
+    ONLY_TERMINAL=$1;
     # @todo use awk to print a table
     jq -c ".[]" $APPLICATIONS | while read i; do
         id=$(echo $i | jq .id | tr -d '"')
         category=$(echo $i | jq .category | tr -d '"')
         command=$(echo $i | jq .command | tr -d '"')
+        interface=$(echo $i | jq .interface | tr -d '"')
+
+        if $ONLY_TERMINAL && $interface; then
+            continue
+        fi
 
         if [ -z $previousCategory ] || [ $previousCategory != ${category^} ]; then 
             if ! [ -z $previousCategory ]; then echo ""; fi
