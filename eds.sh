@@ -24,6 +24,7 @@ for i in $*; do
         -a) AVAIABLE="true" ;;
         -x) ALL="true" ;;
         -l) LIST="true" ;;
+        -li) LIST_ONLY_INTERFACE="true" ;;
         -lt) LIST_ONLY_TERMINAL="true" ;;
         -h) HELP="true" ;;
     esac

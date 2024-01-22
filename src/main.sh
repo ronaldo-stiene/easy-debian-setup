@@ -35,12 +35,17 @@ execute(){
     fi
 
     if ! [ -z $LIST ]; then
-        eds_list false
+        eds_list 'all'
+        return
+    fi
+
+    if ! [ -z $LIST_ONLY_INTERFACE ]; then
+        eds_list 'only_interface'
         return
     fi
 
     if ! [ -z $LIST_ONLY_TERMINAL ]; then
-        eds_list true
+        eds_list 'only_terminal'
         return
     fi
 

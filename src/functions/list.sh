@@ -4,7 +4,7 @@
 if [ -z $SRC ]; then echo "This script should not be called directly"; exit 0; fi
 
 eds_list(){
-    ONLY_TERMINAL=$1;
+    FILTER=$1;
     # @todo use awk to print a table
     jq -c ".[]" $APPLICATIONS | while read i; do
         id=$(echo $i | jq .id | tr -d '"')
@@ -12,7 +12,11 @@ eds_list(){
         command=$(echo $i | jq .command | tr -d '"')
         interface=$(echo $i | jq .interface | tr -d '"')
 
-        if $ONLY_TERMINAL && $interface; then
+        if [ $FILTER == 'only_terminal' ] && $interface; then
+            continue
+        fi
+
+        if [ $FILTER == 'only_interface' ] && ! $interface; then
             continue
         fi
 
